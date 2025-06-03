@@ -57,8 +57,9 @@ df_therm <- run_thermal_metrics(df_daily,
                                 volume = volume)
 
 therm_long <- df_therm %>% 
-  pivot_longer(thermo_depth:wedderburn, names_to = 'stratification_var',
+  pivot_longer(thermo_depth:norm_ss_max, names_to = 'stratification_var',
                values_to = 'value')
+
 ggplot(therm_long, aes(x = date, y = value)) +
   geom_line() +
   facet_wrap(~stratification_var, scales= 'free_y') +

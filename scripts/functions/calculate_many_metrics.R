@@ -23,12 +23,21 @@ run_thermal_metrics <- function(df_daily, # dataframe with date, temperature, de
               lake_num = lake.number(bthA = bthA, bthD = bthD, uStar = uStar, St = schmidt_stability,
                                      metaT = meta_top, metaB = meta_bot, averageHypoDense = hypo_dens),
               strat = ifelse(thermo_depth > 0, 1, 0),
-              norm_ss = (schmidt_stability*area)/volume,
+              norm_ss_size = (schmidt_stability*area)/volume,
               wedderburn = wedderburn.number(hypo_dens - epi_dens, 
                                              metaT = meta_bot - meta_top,
                                              uSt = uStar,
                                              Ao = area,
                                              AvHyp_rho = mean(hypo_dens)))
+  
+  # calculate normalized schmidt stability based on max observed schmidt stability
+  df_out <- df_out %>% # first set any negatives to 0
+    ungroup() %>% 
+    mutate(schmidt_stability = ifelse(schmidt_stability < 0, 0, schmidt_stability),
+           max_ss = max(schmidt_stability, na.rm = TRUE)) %>% 
+    group_by(date) %>% 
+    mutate(norm_ss_max = (schmidt_stability - 1)/max_ss) %>% 
+    select(-max_ss)
   
   return(out = df_out)
   
