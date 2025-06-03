@@ -4,8 +4,8 @@ library(readxl)
 library(rLakeAnalyzer)
 
 lake_name <- 'Rerewhakaaitu'
-profile_filepath <- './data/rerewhakaaitu/Rerewhakaaitu_202102-202504_profiles.csv'
-met_filepath <- './data/rotorua/Rotorua_202202-202503_meteorology.csv'
+profile_filepath <- './data/profiler_data/rerewhakaaitu/Rerewhakaaitu_202102-202504_profiles.csv'
+met_filepath <- './data/profiler_data/rotorua/Rotorua_202202-202503_meteorology.csv'
 
 df <- read.csv(profile_filepath)
 
