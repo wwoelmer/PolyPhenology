@@ -3,9 +3,9 @@ library(readxl)
 library(rLakeAnalyzer)
 source('./scripts/functions/calculate_many_metrics.R')
 
-lake_name <- 'Okaro'
-profile_filepath <- './data/profiler_data/okaro/Okaro_202104-202504_profiles.csv'
-met_filepath <- './data/profiler_data/okaro/Okaro_202103-202504_meteorology.csv'
+lake_name <- 'Rotoehu'
+profile_filepath <- './data/profiler_data/rotoehu/Rotoehu_202101-202504_profiles.csv'
+met_filepath <- './data/profiler_data/rotoehu/Rotoehu_202101-202504_meteorology.csv'
 
 df <- read.csv(profile_filepath)
 
