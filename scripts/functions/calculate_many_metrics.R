@@ -1,4 +1,22 @@
 
+bty <- read_excel('./data//Rotlakes_bathymetry.xls', skip = 1) 
+colnames(bty) <- c('lake', 'depth_m', 'vol_to_bottom_m3', 'vol_at_countour_m3', 
+                   'planar_sa_m2', 'model_sd_m2')
+
+bty$depth_m <- abs(bty$depth_m)
+bty <- bty %>% 
+  filter(lake==lake_name)
+
+# area and depth of bathymetry
+bthA <- bty$model_sd_m2
+bthD <- bty$depth_m
+volume <- bty$vol_to_bottom_m3[1]
+
+bty_area <- bthA
+bty_depth <- bthD
+volume <- volume
+Smin = 0.1
+
 run_thermal_metrics <- function(df_daily, # dataframe with date, temperature, depth, wind
                                 bty_area, # column of df with bathymetric areas
                                 bty_depth, # column of df with  bathymetric depths which correspond to bty_area
@@ -7,6 +25,10 @@ run_thermal_metrics <- function(df_daily, # dataframe with date, temperature, de
                                 ){
   
   area <- bty_area[1]
+  
+  df_daily <- df_daily %>% 
+    mutate(norm_depth = depth/max(depth))
+  
 
   df_out <- df_daily %>% 
     group_by(date) %>% 
@@ -24,6 +46,8 @@ run_thermal_metrics <- function(df_daily, # dataframe with date, temperature, de
                                      metaT = meta_top, metaB = meta_bot, averageHypoDense = hypo_dens),
               strat = ifelse(thermo_depth > 0, 1, 0),
               norm_ss_size = (schmidt_stability*area)/volume,
+              norm_ss_depth =  schmidt.stability(temperature, norm_depth,
+                                                 bthA, bthD),
               wedderburn = wedderburn.number(hypo_dens - epi_dens, 
                                              metaT = meta_bot - meta_top,
                                              uSt = uStar,
